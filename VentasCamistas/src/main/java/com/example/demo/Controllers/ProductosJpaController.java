@@ -47,7 +47,7 @@ public class ProductosJpaController implements Serializable {
             em.getTransaction().begin();
             em.persist(productos);
             em.getTransaction().commit();
-            return "OK";
+            return "producto creado";
         } finally {
             if (em != null) {
                 em.close();
@@ -63,7 +63,7 @@ public class ProductosJpaController implements Serializable {
             em.getTransaction().begin();
             productos = em.merge(productos);
             em.getTransaction().commit();
-            return "OK";
+            return "Actualizado con exito";
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
@@ -95,7 +95,7 @@ public class ProductosJpaController implements Serializable {
             }
             em.remove(productos);
             em.getTransaction().commit();
-            return "OK";
+            return "Producto Eliminado Con exito";
         } finally {
             if (em != null) {
                 em.close();

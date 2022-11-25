@@ -15,12 +15,17 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin(origins="/*")
 @RestController
 @RequestMapping("usuarios")
 public class UsuariosJpaController implements Serializable {
@@ -54,13 +59,15 @@ public class UsuariosJpaController implements Serializable {
         }
     }
 
-    public void create(Usuarios usuarios) {
+    @PostMapping()
+    public String create(Usuarios usuarios) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             em.persist(usuarios);
             em.getTransaction().commit();
+            return "Usuario creado";
         } finally {
             if (em != null) {
                 em.close();
@@ -68,13 +75,15 @@ public class UsuariosJpaController implements Serializable {
         }
     }
 
-    public void edit(Usuarios usuarios) throws NonexistentEntityException, Exception {
+    @PutMapping()
+    public String edit(Usuarios usuarios) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             usuarios = em.merge(usuarios);
             em.getTransaction().commit();
+            return "Usuario Actualizado con exito";
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
@@ -90,8 +99,9 @@ public class UsuariosJpaController implements Serializable {
             }
         }
     }
-
-    public void destroy(Integer id) throws NonexistentEntityException {
+    
+    @DeleteMapping("/{id}")
+    public String destroy(@PathVariable("id") Integer id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -105,6 +115,7 @@ public class UsuariosJpaController implements Serializable {
             }
             em.remove(usuarios);
             em.getTransaction().commit();
+            return "Usuario Eliminado Con exito";
         } finally {
             if (em != null) {
                 em.close();
@@ -112,6 +123,7 @@ public class UsuariosJpaController implements Serializable {
         }
     }
 
+    @CrossOrigin(origins="*")
     @GetMapping()
     public List<Usuarios> findUsuariosEntities() {
         return findUsuariosEntities(true, -1, -1);
