@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins="/*")
 @RestController
-@RequestMapping("categorias")
+@RequestMapping("/categorias")
 public class CategoriasJpaController implements Serializable {
 
     public CategoriasJpaController(EntityManagerFactory emf) {
@@ -99,7 +99,7 @@ public class CategoriasJpaController implements Serializable {
         }
     }
     
-    @CrossOrigin(origins="*")
+    @CrossOrigin("*")
     @GetMapping()
     public List<Categorias> findCategoriasEntities() {
         return findCategoriasEntities(true, -1, -1);
